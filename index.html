@@ -102,12 +102,11 @@
     backdrop-filter: blur(6px);
   }
   .topbar .wrap {
-    display: flex; justify-content: space-between; align-items: baseline;
+    display: flex; justify-content: flex-end; align-items: baseline;
     padding-top: 0.7rem; padding-bottom: 0.7rem;
     font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.02em;
   }
-  .topbar .id { color: var(--ink-faint); }
-  .topbar nav { display: flex; gap: 1.25rem; }
+  .topbar nav { display: flex; gap: 1.25rem; align-items: baseline; }
   .topbar nav a { color: var(--ink-soft); border-bottom: 1px solid transparent; padding-bottom: 1px; transition: color 130ms, border-color 130ms; }
   .topbar nav a:hover, .topbar nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
   #theme-toggle {
@@ -160,6 +159,7 @@
     margin-bottom: 0.9rem;
   }
   h1 .reveal-text { display: inline-block; transform: translateY(110%); }
+  h1 .longhorn { height: 0.62em; width: auto; vertical-align: baseline; margin-left: 0.35rem; }
   body.loaded h1 .reveal-text { animation: riseUp 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
   @keyframes riseUp { to { transform: translateY(0); } }
 
@@ -281,7 +281,6 @@
     .role { grid-template-columns: 1fr; }
     .role .dates { text-align: left; padding-top: 0; }
     .topbar nav { gap: 0.9rem; }
-    .topbar .id { display: none; }
   }
 </style>
 <script>
@@ -312,7 +311,6 @@
 
 <div class="topbar">
   <div class="wrap">
-    <span class="id">manaspathak@utexas</span>
     <nav id="nav">
       <a href="#experience">Experience</a>
       <a href="#research">Research</a>
@@ -326,7 +324,7 @@
 <header class="hero">
   <div class="wrap">
     <p class="eyebrow" id="eyebrow" data-text="The University of Texas at Austin"></p>
-    <h1><span class="reveal-mask"><span class="reveal-text">Manas Pathak</span></span></h1>
+    <h1><span class="reveal-mask"><span class="reveal-text">Manas Pathak <img src="longhorn.svg" alt="Texas Longhorn logo" class="longhorn"></span></span></h1>
     <p class="affil fade fd1">
       ECE undergraduate at <strong>UT Austin</strong>. I work on
       <strong>agentic AI systems</strong>: making them traceable, evaluating them
