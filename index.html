@@ -214,6 +214,26 @@
   .role .dates { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-faint); padding-top: 0.35rem; text-align: right; white-space: nowrap; }
   .role p { grid-column: 1 / -1; color: var(--ink-soft); font-size: 0.97rem; max-width: 42rem; }
 
+  /* ---------- projects ---------- */
+  .projects { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .card {
+    display: flex; flex-direction: column;
+    border: 1px solid var(--rule); border-radius: 5px;
+    padding: 1.15rem 1.2rem; background: transparent;
+    transition: border-color 150ms, transform 150ms, background 150ms;
+  }
+  .card:hover { border-color: var(--accent); background: var(--accent-soft); transform: translateY(-3px); }
+  .card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem; }
+  .card h3::after { content: "↗"; font-family: var(--mono); font-size: 0.8rem; color: var(--ink-faint); transition: color 150ms, transform 150ms; }
+  .card:hover h3, .card:hover h3::after { color: var(--accent); }
+  .card:hover h3::after { transform: translate(2px, -2px); }
+  .card p { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.55; flex: 1; }
+  .card .stack { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.85rem; }
+  .card .stack span {
+    font-family: var(--mono); font-size: 0.68rem; color: var(--ink-faint);
+    border: 1px solid var(--rule); border-radius: 3px; padding: 0.12rem 0.45rem;
+  }
+
   /* ---------- publications ---------- */
   .pub { padding: 1.4rem 0; }
   .pub-id {
@@ -278,6 +298,7 @@
 
   @media (max-width: 640px) {
     .about-grid { grid-template-columns: 1fr; }
+    .projects { grid-template-columns: 1fr; }
     .role { grid-template-columns: 1fr; }
     .role .dates { text-align: left; padding-top: 0; }
     .topbar nav { gap: 0.9rem; }
@@ -314,6 +335,7 @@
     <nav id="nav">
       <a href="#experience">Experience</a>
       <a href="#research">Research</a>
+      <a href="#projects">Projects</a>
       <a href="#education">Education</a>
       <a href="#about">About</a>
       <button id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">☾ dark</button>
@@ -355,9 +377,10 @@
     <div class="role sr">
       <h3>Machine Learning Researcher · <span class="org">HUMAIN Lab, UT Austin</span></h3>
       <span class="dates">Mar 2025 — present</span>
-      <p>LLM evaluation and reliability with Prof. Leqi Liu. CUDA-parallel PyTorch and vLLM
-      evaluation pipelines, a distributed GPU job scheduler on AWS, Chain-of-Thought
-      hallucination detection, and real-time dashboards for distributed jobs.</p>
+      <p>LLM evaluation and reliability with Prof. Leqi Liu. Built CUDA-parallel PyTorch and
+      vLLM pipelines that cut evaluation runtime 70% across 100+ models, a distributed GPU
+      job scheduler on AWS that saved ~$10k in cloud costs, Chain-of-Thought hallucination
+      detection for Qwen/Gemma-7B, and React/FastAPI dashboards tracking 50+ distributed jobs.</p>
     </div>
 
     <div class="role sr">
@@ -402,6 +425,44 @@
         makes that difference measurable.
       </p>
     </article>
+  </section>
+
+  <section id="projects">
+    <div class="sec-head"><h2>Projects</h2></div>
+
+    <div class="projects">
+      <a class="card sr" href="https://github.com/Manas2006/fraud-detection" target="_blank" rel="noopener">
+        <h3>CyberWise Seniors</h3>
+        <p>Fraud-detection platform shielding seniors from phone, SMS, and email scams.
+        A Spring Boot microservice wired to a BERT classifier returns risk scores in
+        &lt;200&nbsp;ms; Twilio webhooks and a React dashboard cut scam successes 60%.</p>
+        <div class="stack"><span>Java</span><span>Spring Boot</span><span>BERT</span><span>Twilio</span><span>React</span></div>
+      </a>
+
+      <a class="card sr" href="https://github.com/Manas2006/order-smarter" target="_blank" rel="noopener">
+        <h3>Order Smarter</h3>
+        <p>A Spring Boot orchestrator that scrapes Uber Eats group-cart links, predicts
+        calories with a Python NLP model, and returns structured nutritional insights
+        through a REST API.</p>
+        <div class="stack"><span>Java</span><span>Spring Boot</span><span>Python</span><span>NLP</span><span>REST</span></div>
+      </a>
+
+      <a class="card sr" href="https://github.com/Manas2006/travel-planner" target="_blank" rel="noopener">
+        <h3>WanderWise</h3>
+        <p>Full-stack travel planner for building and sharing itineraries. JWT-secured
+        CRUD over Django REST and PostgreSQL, OAuth2 APIs with rate limiting and Swagger
+        docs, and a React + Tailwind front end on the Google Maps API.</p>
+        <div class="stack"><span>React</span><span>Django REST</span><span>PostgreSQL</span><span>Google Maps</span></div>
+      </a>
+
+      <a class="card sr" href="https://github.com/Manas2006/mavs" target="_blank" rel="noopener">
+        <h3>Mavs Draft Tool</h3>
+        <p>A scouting tool built for the Dallas Mavericks to filter and compare prospects
+        for the 2025 NBA draft, turning raw player data into rankings the front office
+        can act on.</p>
+        <div class="stack"><span>TypeScript</span><span>React</span><span>Data</span></div>
+      </a>
+    </div>
   </section>
 
   <section id="education">
