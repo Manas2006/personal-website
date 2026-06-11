@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manas Pathak — ECE @ UT Austin</title>
+<meta name="description" content="ECE undergraduate at UT Austin working on agentic AI systems: making them traceable, evaluable, and worth trusting.">
+<meta property="og:title" content="Manas Pathak">
+<meta property="og:description" content="Agentic AI systems, evaluation, and reliability. ECE @ UT Austin.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23bf5700'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='bold' fill='%23fefefc' text-anchor='middle'%3EMP%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fefefc;
+    --ink: #16181d;
+    --ink-soft: #4a4f58;
+    --ink-faint: #8a8f99;
+    --rule: #e3e2dc;
+    --accent: #bf5700;
+    --accent-soft: #f7ebe1;
+    --serif: "Source Serif 4", "Charter", "Iowan Old Style", Georgia, serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", "Cascadia Mono", monospace;
+    --w: 46rem;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: var(--ink); text-decoration: none; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  .wrap { max-width: var(--w); margin: 0 auto; padding: 0 1.5rem; }
+  section { scroll-margin-top: 3.5rem; }
+
+  /* ---------- reading progress ---------- */
+  #progress {
+    position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+    background: var(--accent); z-index: 50;
+  }
+
+  /* ---------- mouse glow ---------- */
+  #glow {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 30%),
+                rgba(191, 87, 0, 0.055), transparent 70%);
+  }
+
+  /* ---------- custom cursor ---------- */
+  @media (pointer: fine) {
+    #cursor-dot, #cursor-ring {
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 60;
+      border-radius: 50%; transform: translate(-50%, -50%);
+    }
+    #cursor-dot { width: 5px; height: 5px; background: var(--accent); }
+    #cursor-ring {
+      width: 28px; height: 28px; border: 1px solid rgba(191, 87, 0, 0.45);
+      transition: width 180ms ease, height 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+    body.hovering #cursor-ring {
+      width: 44px; height: 44px;
+      border-color: var(--accent); background: rgba(191, 87, 0, 0.06);
+    }
+  }
+  @media (pointer: coarse) { #cursor-dot, #cursor-ring { display: none; } }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    border-bottom: 1px solid var(--rule);
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(254, 254, 252, 0.92);
+    backdrop-filter: blur(6px);
+  }
+  .topbar .wrap {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-top: 0.7rem; padding-bottom: 0.7rem;
+    font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.02em;
+  }
+  .topbar .id { color: var(--ink-faint); }
+  .topbar nav { display: flex; gap: 1.25rem; }
+  .topbar nav a { color: var(--ink-soft); border-bottom: 1px solid transparent; padding-bottom: 1px; transition: color 130ms, border-color 130ms; }
+  .topbar nav a:hover, .topbar nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ---------- intro overlay (terminal boot) ---------- */
+  #intro {
+    position: fixed; inset: 0; z-index: 100; background: #101216;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.7s cubic-bezier(0.7, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  #intro.done { transform: translateY(-100%); }
+  #intro .term {
+    font-family: var(--mono); font-size: 0.92rem; line-height: 1.9;
+    color: #c9cdd4; min-width: min(34rem, 86vw); padding: 1.5rem;
+  }
+  #intro .term .ln { white-space: pre; min-height: 1.9em; }
+  #intro .prompt { color: #bf5700; }
+  #intro .ok { color: #6abf69; }
+  #intro .dim { color: #6b7077; }
+  #intro .caret {
+    display: inline-block; width: 0.55em; height: 1.05em; background: #bf5700;
+    vertical-align: text-bottom; animation: blink 0.85s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  #intro .skip {
+    position: absolute; bottom: 1.4rem; left: 50%; transform: translateX(-50%);
+    font-family: var(--mono); font-size: 0.7rem; color: #6b7077; letter-spacing: 0.08em;
+  }
+
+  /* ---------- header ---------- */
+  header.hero { padding: 4.5rem 0 3.25rem; border-bottom: 1px solid var(--rule); position: relative; z-index: 1; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 0.78rem; color: var(--accent);
+    letter-spacing: 0.04em; margin-bottom: 1.1rem; min-height: 1.2em;
+  }
+  .reveal-mask { overflow: hidden; display: block; }
+  h1 {
+    font-size: clamp(2.2rem, 6vw, 3.1rem);
+    font-weight: 700; letter-spacing: -0.015em; line-height: 1.12;
+    margin-bottom: 0.9rem;
+  }
+  h1 .reveal-text { display: inline-block; transform: translateY(110%); }
+  body.loaded h1 .reveal-text { animation: riseUp 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+  @keyframes riseUp { to { transform: translateY(0); } }
+
+  .affil { color: var(--ink-soft); font-size: 1.05rem; line-height: 1.7; max-width: 39rem; }
+  .affil strong { color: var(--ink); font-weight: 600; }
+  .linkrow {
+    margin-top: 1.6rem; display: flex; flex-wrap: wrap; gap: 0.55rem;
+    font-family: var(--mono); font-size: 0.8rem;
+  }
+  .linkrow a {
+    border: 1px solid var(--rule); border-radius: 3px;
+    padding: 0.32rem 0.7rem; color: var(--ink-soft);
+    transition: border-color 120ms, color 120ms, background 120ms, transform 120ms;
+  }
+  .linkrow a:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); transform: translateY(-2px); }
+
+  .fade { opacity: 0; transform: translateY(12px); }
+  body.loaded .fade { animation: fadeUp 0.6s ease-out forwards; }
+  body.loaded .fd1 { animation-delay: 0.45s; }
+  body.loaded .fd2 { animation-delay: 0.65s; }
+  @keyframes fadeUp { to { opacity: 1; transform: none; } }
+
+  /* ---------- sections + scroll reveal ---------- */
+  main { position: relative; z-index: 1; }
+  section { padding: 3rem 0 0.5rem; }
+  .sec-head { display: flex; align-items: baseline; gap: 0.9rem; margin-bottom: 1.8rem; }
+  .sec-head h2 {
+    font-size: 0.82rem; font-family: var(--mono); font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink);
+    white-space: nowrap;
+  }
+  .sec-head::after {
+    content: ""; flex: 1; height: 1px; background: var(--rule);
+    transform: translateY(-2px) scaleX(0); transform-origin: left;
+    transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  section.inview .sec-head::after { transform: translateY(-2px) scaleX(1); }
+
+  .sr { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .sr.inview { opacity: 1; transform: none; }
+  .sr:nth-child(2) { transition-delay: 0.08s; }
+  .sr:nth-child(3) { transition-delay: 0.16s; }
+  .sr:nth-child(4) { transition-delay: 0.24s; }
+  .sr:nth-child(5) { transition-delay: 0.32s; }
+  .sr:nth-child(6) { transition-delay: 0.4s; }
+
+  /* ---------- experience ---------- */
+  .role { display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 1.5rem; padding: 1.15rem 0; border-bottom: 1px solid var(--rule); }
+  .role:last-child { border-bottom: none; }
+  .role h3 { font-size: 1.1rem; font-weight: 600; }
+  .role .org { color: var(--accent); font-weight: 400; }
+  .role .dates { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-faint); padding-top: 0.35rem; text-align: right; white-space: nowrap; }
+  .role p { grid-column: 1 / -1; color: var(--ink-soft); font-size: 0.97rem; max-width: 42rem; }
+
+  /* ---------- publications ---------- */
+  .pub { padding: 1.4rem 0; }
+  .pub-id {
+    font-family: var(--mono); font-size: 0.75rem; color: var(--ink-faint);
+    margin-bottom: 0.45rem; display: flex; gap: 0.9rem; flex-wrap: wrap;
+  }
+  .pub-id .tag { color: var(--accent); }
+  .pub h3 { font-size: 1.28rem; font-weight: 600; line-height: 1.35; margin-bottom: 0.35rem; }
+  .pub h3 a { background-image: linear-gradient(var(--accent), var(--accent)); background-size: 0% 1px; background-repeat: no-repeat; background-position: left bottom; transition: background-size 250ms ease, color 150ms; }
+  .pub h3 a:hover { background-size: 100% 1px; color: var(--accent); }
+  .pub .authors { font-size: 0.95rem; color: var(--ink-soft); margin-bottom: 0.55rem; }
+  .pub .authors b { color: var(--ink); font-weight: 600; }
+  .pub .abstract { color: var(--ink-soft); font-size: 0.98rem; max-width: 42rem; }
+
+  /* ---------- education ---------- */
+  .edu { padding: 0.4rem 0 1.2rem; }
+  .edu-top { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.3rem 1.5rem; }
+  .edu h3 { font-size: 1.15rem; font-weight: 600; }
+  .edu .dates { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-faint); white-space: nowrap; }
+  .edu .degree { color: var(--ink-soft); margin-top: 0.2rem; font-size: 0.98rem; }
+  .edu .degree b { color: var(--ink); font-weight: 600; }
+  .course-label { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); margin: 1.3rem 0 0.7rem; }
+  .courses { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .courses span {
+    font-family: var(--mono); font-size: 0.76rem; color: var(--ink-soft);
+    border: 1px solid var(--rule); border-radius: 3px; padding: 0.28rem 0.65rem;
+    transition: border-color 130ms, color 130ms, background 130ms, transform 130ms;
+  }
+  .courses span:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); transform: translateY(-2px); }
+
+  /* ---------- about ---------- */
+  .about-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 2.5rem; }
+  .about-grid p { color: var(--ink-soft); margin-bottom: 1rem; max-width: 38rem; }
+  .facts { font-size: 0.92rem; }
+  .facts dt { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); margin-top: 1rem; }
+  .facts dt:first-child { margin-top: 0; }
+  .facts dd { color: var(--ink); margin-top: 0.25rem; }
+
+  /* ---------- footer ---------- */
+  footer { margin-top: 4rem; border-top: 1px solid var(--rule); padding: 2rem 0 3rem; position: relative; z-index: 1; }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-family: var(--mono); font-size: 0.75rem; color: var(--ink-faint); }
+  footer a { color: var(--ink-soft); }
+  footer a:hover { color: var(--accent); }
+
+  /* ---------- reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    #intro { display: none; }
+    h1 .reveal-text { transform: none; animation: none !important; }
+    .fade { opacity: 1; transform: none; animation: none !important; }
+    .sr { opacity: 1; transform: none; transition: none; }
+    .sec-head::after { transform: translateY(-2px) scaleX(1); transition: none; }
+    #cursor-dot, #cursor-ring, #glow { display: none; }
+  }
+
+  /* ---------- print ---------- */
+  @media print {
+    #intro, #glow, #cursor-dot, #cursor-ring, #progress, .topbar { display: none !important; }
+    .sr, .fade, h1 .reveal-text { opacity: 1 !important; transform: none !important; }
+    body { font-size: 11pt; }
+  }
+
+  @media (max-width: 640px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .role { grid-template-columns: 1fr; }
+    .role .dates { text-align: left; padding-top: 0; }
+    .topbar nav { gap: 0.9rem; }
+    .topbar .id { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="glow"></div>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<div id="intro" aria-hidden="true">
+  <div class="term">
+    <div class="ln" id="ln0"></div>
+    <div class="ln" id="ln1"></div>
+    <div class="ln" id="ln2"></div>
+    <div class="ln" id="ln3"></div>
+    <div class="ln" id="ln4"></div>
+  </div>
+  <span class="skip">click to skip</span>
+</div>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="id">manaspathak@utexas</span>
+    <nav id="nav">
+      <a href="#experience">Experience</a>
+      <a href="#research">Research</a>
+      <a href="#education">Education</a>
+      <a href="#about">About</a>
+    </nav>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow" id="eyebrow" data-text="The University of Texas at Austin"></p>
+    <h1><span class="reveal-mask"><span class="reveal-text">Manas Pathak</span></span></h1>
+    <p class="affil fade fd1">
+      ECE undergraduate at <strong>UT Austin</strong>. I work on
+      <strong>agentic AI systems</strong>: making them traceable, evaluating them
+      rigorously, and building the infrastructure that lets us trust their progress.
+      ML researcher in the <strong>HUMAIN Lab</strong>, currently interning at <strong>IBM</strong>.
+    </p>
+    <div class="linkrow fade fd2">
+      <a href="mailto:manaspathak@utexas.edu">email</a>
+      <a href="https://github.com/Manas2006">github</a>
+      <a href="https://linkedin.com/in/manasp123">linkedin</a>
+      <a href="https://arxiv.org/abs/2604.11996">arxiv</a>
+      <a href="/cv.pdf">cv.pdf</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="experience">
+    <div class="sec-head"><h2>Experience</h2></div>
+
+    <div class="role sr">
+      <h3>Software Developer Intern · <span class="org">IBM</span></h3>
+      <span class="dates">Summer 2026 · New York, NY</span>
+      <p>Building agent infrastructure for LangGraph Deep Agents on OpenShift,
+      enabling skill-based orchestration across AI workflows.</p>
+    </div>
+
+    <div class="role sr">
+      <h3>Machine Learning Researcher · <span class="org">HUMAIN Lab, UT Austin</span></h3>
+      <span class="dates">Mar 2025 — present</span>
+      <p>LLM evaluation and reliability with Prof. Leqi Liu. CUDA-parallel PyTorch and vLLM
+      evaluation pipelines, a distributed GPU job scheduler on AWS, Chain-of-Thought
+      hallucination detection, and real-time dashboards for distributed jobs.</p>
+    </div>
+
+    <div class="role sr">
+      <h3>Undergraduate Department Tutor · <span class="org">ECE 312, UT Austin</span></h3>
+      <span class="dates">Jan 2026 — present</span>
+      <p>Mentoring 40+ students in C/C++ memory management, recursion, and graph traversal,
+      with GDB and Valgrind debugging sessions.</p>
+    </div>
+
+    <div class="role sr">
+      <h3>Software Engineering Intern · <span class="org">Graph Neural Networks Lab, UT Austin</span></h3>
+      <span class="dates">Dec 2024 — Mar 2025</span>
+      <p>Pipeline orchestration and monitoring with TypeScript, React, and PostgreSQL,
+      plus vectorized geometric tooling and performance profiling in Python.</p>
+    </div>
+
+    <div class="role sr">
+      <h3>Software Engineering Intern · <span class="org">ModHeader</span></h3>
+      <span class="dates">Jun 2023 — Oct 2023</span>
+      <p>Full-stack work for a 250k-user browser extension: Svelte UI, Node.js APIs on
+      DynamoDB, and an analytics dashboard in React and TypeScript.</p>
+    </div>
+  </section>
+
+  <section id="research">
+    <div class="sec-head"><h2>Research</h2></div>
+
+    <article class="pub sr">
+      <div class="pub-id">
+        <span>arXiv:2604.11996</span>
+        <span class="tag">under review, COLM 2026</span>
+        <span>first author</span>
+      </div>
+      <h3><a href="https://arxiv.org/abs/2604.11996">Filtered Reasoning Score: Evaluating Reasoning Quality on a Model's Most-Confident Traces</a></h3>
+      <p class="authors"><b>Manas Pathak</b>, Xingyao Chen, Amy Zhang, Leqi Liu</p>
+      <p class="abstract">
+        Accuracy treats every answer the same, but deployed systems act on the outputs a
+        model is most confident about. FRS evaluates reasoning quality on exactly those
+        traces, conditioning the metric on the model's own confidence. The result is a view
+        of reliability that accuracy alone cannot provide: two models with identical scores
+        can behave very differently when you only trust what they are sure of, and FRS
+        makes that difference measurable.
+      </p>
+    </article>
+  </section>
+
+  <section id="education">
+    <div class="sec-head"><h2>Education</h2></div>
+    <div class="edu sr">
+      <div class="edu-top">
+        <h3>The University of Texas at Austin</h3>
+        <span class="dates">Expected May 2028</span>
+      </div>
+      <p class="degree"><b>B.S. Electrical &amp; Computer Engineering</b>, Software Concentration · GPA 3.96 / 4.00</p>
+      <p class="course-label">Relevant coursework</p>
+      <div class="courses">
+        <span>Distributed Systems</span>
+        <span>Deep Reinforcement Learning</span>
+        <span>Operating Systems</span>
+        <span>Machine Learning</span>
+        <span>Computer Architecture</span>
+        <span>Data Structures &amp; Algorithms</span>
+        <span>Discrete Math</span>
+        <span>Software Design &amp; Implementation I/II</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="sec-head"><h2>About</h2></div>
+    <div class="about-grid sr">
+      <div>
+        <p>I work on AI systems, with a focus on agents. As agents take on longer
+        horizons and more autonomy, the hard problem shifts from making them capable to
+        making them legible: tracing what they did, why they did it, and whether it worked.</p>
+        <p>That is the thread through my work. My research builds evaluation methods that
+        condition on a model's own confidence, so a score reflects behavior you would
+        actually act on. My engineering builds the observability layer for agent workflows,
+        instrumenting how agents select and compose skills. Capability claims should be
+        verifiable. That is how we trust progress.</p>
+      </div>
+      <dl class="facts">
+        <dt>Degree</dt><dd>B.S. ECE, May 2028</dd>
+        <dt>GPA</dt><dd>3.96 / 4.00</dd>
+        <dt>Honors</dt><dd>Undergraduate Research Fellowship ($10,000) · Tau Beta Pi · Eta Kappa Nu</dd>
+        <dt>Stack</dt><dd>Python, C/C++, Java, Rust, Go, TypeScript · PyTorch, CUDA, JAX · Kubernetes, AWS, Terraform</dd>
+      </dl>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Manas Pathak · Austin, TX</span>
+    <span><a href="#experience">back to top ↑</a></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- intro: multi-line terminal boot ---------- */
+  var intro = document.getElementById("intro");
+  var finished = false;
+
+  function finishIntro() {
+    if (finished) return;
+    finished = true;
+    intro.classList.add("done");
+    document.body.classList.add("loaded");
+    typeEyebrow();
+    setTimeout(function () { intro.style.display = "none"; }, 800);
+  }
+
+  function typeInto(el, html, speed, done) {
+    /* types plain text, then swaps in the styled html */
+    var text = html.replace(/<[^>]*>/g, "");
+    var i = 0;
+    var caret = '<span class="caret"></span>';
+    (function step() {
+      if (finished) return;
+      if (i <= text.length) {
+        el.innerHTML = escapeHtml(text.slice(0, i)) + caret;
+        i++;
+        setTimeout(step, speed);
+      } else {
+        el.innerHTML = html;
+        if (done) setTimeout(done, 180);
+      }
+    })();
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function fillBar(el, done) {
+    var blocks = 18, b = 0;
+    (function step() {
+      if (finished) return;
+      b++;
+      var filled = "";
+      var empty = "";
+      for (var k = 0; k < b; k++) filled += "\u2588";
+      for (var m = 0; m < blocks - b; m++) empty += "\u2591";
+      var pct = Math.round((b / blocks) * 100);
+      el.innerHTML = '<span class="dim">building</span> [' + filled + empty + "] " + pct + "%";
+      if (b < blocks) setTimeout(step, 42 + Math.random() * 55);
+      else if (done) setTimeout(done, 220);
+    })();
+  }
+
+  if (reduced) {
+    intro.style.display = "none";
+    document.body.classList.add("loaded");
+    var eb = document.getElementById("eyebrow");
+    eb.textContent = eb.getAttribute("data-text");
+  } else {
+    intro.addEventListener("click", finishIntro);
+    var l0 = document.getElementById("ln0"),
+        l1 = document.getElementById("ln1"),
+        l2 = document.getElementById("ln2"),
+        l3 = document.getElementById("ln3"),
+        l4 = document.getElementById("ln4");
+
+    typeInto(l0, '<span class="prompt">$</span> whoami', 40, function () {
+      typeInto(l1, 'manas-pathak <span class="dim">// ece @ ut austin</span>', 22, function () {
+        typeInto(l2, '<span class="prompt">$</span> make site --theme=academic', 32, function () {
+          fillBar(l3, function () {
+            typeInto(l4, '<span class="ok">ok</span> <span class="dim">entering…</span>', 30, function () {
+              setTimeout(finishIntro, 500);
+            });
+          });
+        });
+      });
+    });
+
+    /* safety: never trap the visitor */
+    setTimeout(finishIntro, 8000);
+  }
+
+  /* ---------- eyebrow typing after intro ---------- */
+  function typeEyebrow() {
+    var eb = document.getElementById("eyebrow");
+    var text = eb.getAttribute("data-text");
+    var j = 0;
+    (function type() {
+      if (j <= text.length) {
+        eb.textContent = text.slice(0, j);
+        j++;
+        setTimeout(type, 18);
+      }
+    })();
+  }
+
+  /* ---------- scroll reveal ---------- */
+  if (!reduced && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add("inview");
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    document.querySelectorAll("section, .sr").forEach(function (el) { io.observe(el); });
+  } else {
+    document.querySelectorAll("section, .sr").forEach(function (el) { el.classList.add("inview"); });
+  }
+
+  /* ---------- scrollspy: highlight current section in nav ---------- */
+  var navLinks = document.querySelectorAll("#nav a");
+  var sections = document.querySelectorAll("main section");
+  if ("IntersectionObserver" in window) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          navLinks.forEach(function (a) {
+            a.classList.toggle("active", a.getAttribute("href") === "#" + e.target.id);
+          });
+        }
+      });
+    }, { rootMargin: "-30% 0px -60% 0px" });
+    sections.forEach(function (s) { spy.observe(s); });
+  }
+
+  /* ---------- reading progress ---------- */
+  var bar = document.getElementById("progress");
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + "%";
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- mouse: glow + custom cursor ---------- */
+  var fine = window.matchMedia("(pointer: fine)").matches;
+  if (fine && !reduced) {
+    var glow = document.getElementById("glow");
+    var dot = document.getElementById("cursor-dot");
+    var ring = document.getElementById("cursor-ring");
+    var mx = innerWidth / 2, my = innerHeight / 3, rx = mx, ry = my;
+
+    document.addEventListener("mousemove", function (e) {
+      mx = e.clientX; my = e.clientY;
+      glow.style.setProperty("--mx", mx + "px");
+      glow.style.setProperty("--my", my + "px");
+      dot.style.left = mx + "px";
+      dot.style.top = my + "px";
+    }, { passive: true });
+
+    (function trail() {
+      rx += (mx - rx) * 0.16;
+      ry += (my - ry) * 0.16;
+      ring.style.left = rx + "px";
+      ring.style.top = ry + "px";
+      requestAnimationFrame(trail);
+    })();
+
+    document.querySelectorAll("a, .courses span").forEach(function (el) {
+      el.addEventListener("mouseenter", function () { document.body.classList.add("hovering"); });
+      el.addEventListener("mouseleave", function () { document.body.classList.remove("hovering"); });
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
