@@ -249,6 +249,8 @@
     margin-bottom: 0.45rem; display: flex; gap: 0.9rem; flex-wrap: wrap;
   }
   .pub-id .tag { color: var(--accent); }
+  .pub-id .tag a { color: inherit; border-bottom: 1px solid transparent; transition: border-color 150ms; }
+  .pub-id .tag a:hover { border-bottom-color: var(--accent); }
   .pub h3 { font-size: 1.28rem; font-weight: 600; line-height: 1.35; margin-bottom: 0.35rem; }
   .pub h3 a { background-image: linear-gradient(var(--accent), var(--accent)); background-size: 0% 1px; background-repeat: no-repeat; background-position: left bottom; transition: background-size 250ms ease, color 150ms; }
   .pub h3 a:hover { background-size: 100% 1px; color: var(--accent); }
@@ -433,6 +435,26 @@
         of reliability that accuracy alone cannot provide: two models with identical scores
         can behave very differently when you only trust what they are sure of, and FRS
         makes that difference measurable.
+      </p>
+    </article>
+
+    <article class="pub sr">
+      <div class="pub-id">
+        <span class="tag"><a href="reward-hacking-ppo-code-generation.pdf" target="_blank" rel="noopener">view PDF ↗</a></span>
+        <span>Deep Reinforcement Learning · UT Austin</span>
+        <span>first author</span>
+      </div>
+      <h3><a href="reward-hacking-ppo-code-generation.pdf" target="_blank" rel="noopener">Reward Hacking in PPO-Based Code Generation: When Passing Tests Does Not Mean Getting It Right</a></h3>
+      <p class="authors"><b>Manas Pathak</b></p>
+      <p class="abstract">
+        RL with execution feedback is increasingly used to improve code generation, but
+        finite test suites are imperfect proxies for true correctness — a natural setting
+        for reward hacking. In a controlled PPO study on HumanEval with DeepSeek-Coder-1.3B,
+        I compare binary, partial, and heuristic reward structures across three seeds. Shaped
+        rewards improve visible pass@1 but widen the robustness gap on HumanEval+ by up to
+        14 pp; pass@k alone overstates semantic competence by 10–18 pp. The work argues
+        that robustness-gap reporting should accompany pass@k when evaluating RL-trained
+        code models.
       </p>
     </article>
   </section>
