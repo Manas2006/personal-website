@@ -241,6 +241,44 @@
     font-family: var(--mono); font-size: 0.68rem; color: var(--ink-faint);
     border: 1px solid var(--rule); border-radius: 3px; padding: 0.12rem 0.45rem;
   }
+  .featured-project {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    align-items: end;
+    border-top: 3px solid var(--accent);
+    padding: 1.35rem 1.4rem;
+  }
+  .featured-project h3 { font-size: 1.28rem; margin-bottom: 0.45rem; }
+  .featured-project h3::after { display: none; }
+  .featured-project .product-label {
+    display: flex; align-items: center; gap: 0.45rem;
+    margin-bottom: 0.45rem; color: var(--accent);
+    font-family: var(--mono); font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .status-dot {
+    width: 0.5rem; height: 0.5rem; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+  .project-actions {
+    display: flex; flex-direction: column; gap: 0.55rem;
+    min-width: 11.5rem; font-family: var(--mono); font-size: 0.75rem;
+  }
+  .project-actions a {
+    border: 1px solid var(--rule); border-radius: 3px;
+    padding: 0.48rem 0.75rem; text-align: center; color: var(--ink-soft);
+    transition: border-color 130ms, color 130ms, background 130ms, transform 130ms;
+  }
+  .project-actions a:hover {
+    border-color: var(--accent); color: var(--accent);
+    background: var(--accent-soft); transform: translateY(-2px);
+  }
+  .project-actions a.primary {
+    border-color: var(--accent); background: var(--accent); color: var(--paper);
+  }
+  .project-actions a.primary:hover { color: var(--paper); filter: brightness(1.08); }
 
   /* ---------- publications ---------- */
   .pub { padding: 1.4rem 0; }
@@ -309,6 +347,8 @@
   @media (max-width: 640px) {
     .about-grid { grid-template-columns: 1fr; }
     .projects { grid-template-columns: 1fr; }
+    .featured-project { grid-template-columns: 1fr; align-items: start; }
+    .project-actions { min-width: 0; }
     .role { grid-template-columns: 1fr; }
     .role .dates { text-align: left; padding-top: 0; }
     .topbar nav { gap: 0.9rem; }
@@ -463,13 +503,21 @@
     <div class="sec-head"><h2>Projects</h2></div>
 
     <div class="projects">
-      <a class="card sr" href="https://github.com/Manas2006/fraud-detection" target="_blank" rel="noopener">
-        <h3>CyberWise Seniors</h3>
-        <p>Fraud-detection platform shielding seniors from phone, SMS, and email scams.
-        A Spring Boot microservice wired to a BERT classifier returns risk scores in
-        &lt;200&nbsp;ms; Twilio webhooks and a React dashboard cut scam successes 60%.</p>
-        <div class="stack"><span>Java</span><span>Spring Boot</span><span>BERT</span><span>Twilio</span><span>React</span></div>
-      </a>
+      <article class="card featured-project sr">
+        <div>
+          <p class="product-label"><span class="status-dot" aria-hidden="true"></span>Live product</p>
+          <h3>Atlas Research Console</h3>
+          <p>Use Atlas to search a distributed-systems knowledge base and explore how
+          indexing, replication, event streaming, and media pipelines behave under load
+          and failure. The interactive console exposes system health, query behavior,
+          recovery workflows, and the engineering behind each service.</p>
+          <div class="stack"><span>Go</span><span>gRPC</span><span>BM25</span><span>Raft</span><span>Kafka</span><span>FFmpeg</span></div>
+        </div>
+        <div class="project-actions" aria-label="Atlas Research Console links">
+          <a class="primary" href="https://manas2006.github.io/distributed-systems-portfolio/" target="_blank" rel="noopener">Open live console ↗</a>
+          <a href="https://github.com/Manas2006/distributed-systems-portfolio" target="_blank" rel="noopener">View source ↗</a>
+        </div>
+      </article>
 
       <a class="card sr" href="https://github.com/Manas2006/order-smarter" target="_blank" rel="noopener">
         <h3>Order Smarter</h3>
