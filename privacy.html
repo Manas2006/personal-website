@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy · personal-gmail-mcp</title>
+<meta name="description" content="Privacy policy for personal-gmail-mcp, a single-user read-only Gmail tool operated by Manas Pathak.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fefefc; --fg:#16181d; --soft:#4a4f58; --faint:#8a8f99;
+    --rule:#e3e2dc; --accent:#bf5700; --w:46rem;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#101216; --fg:#e9e9e4; --soft:#b3b6bd; --faint:#7f858f;
+      --rule:#252a31; --accent:#e8873d;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#101216; --fg:#e9e9e4; --soft:#b3b6bd; --faint:#7f858f;
+    --rule:#252a31; --accent:#e8873d;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family:"Source Serif 4","Charter","Iowan Old Style",Georgia,serif;
+    font-size:1.02rem; line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--w); margin:0 auto; padding:4.5rem 1.4rem 6rem}
+  a{color:var(--accent); text-underline-offset:.18em}
+  a:hover{text-decoration-thickness:2px}
+  .back{
+    font-family:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Mono",monospace;
+    font-size:.78rem; letter-spacing:.06em; text-decoration:none;
+  }
+  .back:hover{text-decoration:underline}
+  h1{
+    font-size:clamp(1.9rem,5vw,2.6rem); font-weight:700;
+    letter-spacing:-0.015em; line-height:1.15; margin:1.6rem 0 .5rem;
+  }
+  .updated{
+    font-family:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Mono",monospace;
+    font-size:.74rem; letter-spacing:.1em; text-transform:uppercase; color:var(--faint);
+    margin:0 0 2.4rem;
+  }
+  h2{
+    font-family:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Mono",monospace;
+    font-size:.82rem; font-weight:500; text-transform:uppercase; letter-spacing:.14em;
+    color:var(--soft); margin:2.9rem 0 .7rem;
+    padding-top:1.4rem; border-top:1px solid var(--rule);
+  }
+  h2:first-of-type{border-top:none; padding-top:0}
+  p{margin:0 0 1rem; color:var(--fg)}
+  ul{margin:0 0 1rem; padding-left:1.15rem}
+  li{margin:.36rem 0}
+  strong{font-weight:600}
+  code{
+    font-family:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Mono",monospace;
+    font-size:.86em; background:color-mix(in srgb, var(--fg) 7%, transparent);
+    padding:.1em .36em; border-radius:4px;
+  }
+  .lead{font-size:1.1rem; color:var(--soft)}
+  footer{
+    margin-top:3.4rem; padding-top:1.3rem; border-top:1px solid var(--rule);
+    font-family:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Mono",monospace;
+    font-size:.76rem; color:var(--faint); letter-spacing:.04em;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="/">← manaspathak.com</a>
+
+  <h1>Privacy Policy</h1>
+  <p class="updated">personal-gmail-mcp · Last updated 4 September 2026</p>
+
+  <p class="lead">
+    personal-gmail-mcp is a private, single-user tool. It exists so that its operator, Manas Pathak,
+    can search his own Gmail from an AI assistant. It is not a product, it is not offered to the
+    public, and it has no users other than its operator.
+  </p>
+
+  <h2>What it accesses</h2>
+  <p>
+    The application requests exactly one Google API scope,
+    <code>https://www.googleapis.com/auth/gmail.readonly</code>, against the Google Account of the
+    person who authorizes it. That scope is read-only. The application is technically incapable of
+    sending, modifying, labeling, or deleting mail, and it requests no access to Google Drive,
+    Calendar, Contacts, or any other Google service.
+  </p>
+
+  <h2>What it does with data</h2>
+  <p>
+    Message headers and bodies are fetched from the Gmail API on demand, in direct response to a
+    request from the authorizing user, and returned to that same user's own assistant session. The
+    application keeps <strong>no database and no persistent storage of any kind</strong>. Message
+    content is not written to disk, not logged, and not retained after the request that fetched it
+    completes. A short-lived Google access token is held in memory to avoid re-authenticating on
+    every request, and it expires on its own within the hour.
+  </p>
+
+  <h2>What it never does</h2>
+  <ul>
+    <li>It does not transfer, sell, rent, or otherwise disclose Google user data to any third party.</li>
+    <li>It does not use Google user data for advertising, marketing, or any form of profiling.</li>
+    <li>It does not use Google user data to train, fine-tune, or improve any machine learning or AI model.</li>
+    <li>It does not permit humans to read Google user data, except the operator reading his own mail.</li>
+  </ul>
+
+  <h2>Limited Use</h2>
+  <p>
+    The use and transfer of information received from Google APIs to any other app adheres to the
+    <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google
+    API Services User Data Policy</a>, including its Limited Use requirements.
+  </p>
+
+  <h2>Revoking access</h2>
+  <p>
+    Access can be withdrawn at any time from
+    <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">myaccount.google.com/permissions</a>.
+    Revocation invalidates the application's credentials immediately and permanently. Because nothing
+    is stored, there is no retained copy of any message to delete afterwards.
+  </p>
+
+  <h2>Changes</h2>
+  <p>
+    If this policy changes, the revision date above will change with it. Given that the application
+    has a single user, changes will not be announced by any other means.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions about this policy can go to
+    <a href="mailto:manaspathak11@gmail.com">manaspathak11@gmail.com</a>.
+  </p>
+
+  <footer>Operated by Manas Pathak · manaspathak.com</footer>
+</div>
+</body>
+</html>
+
