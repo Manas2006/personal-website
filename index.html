@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manas Pathak — ECE @ UT Austin</title>
+<title>Manas Pathak | ECE @ UT Austin</title>
 <meta name="description" content="ECE undergraduate at UT Austin working on agentic AI systems: making them traceable, evaluable, and worth trusting.">
 <meta property="og:title" content="Manas Pathak">
 <meta property="og:description" content="Agentic AI systems, evaluation, and reliability. ECE @ UT Austin.">
@@ -231,6 +231,7 @@
     transition: border-color 150ms, transform 150ms, background 150ms;
   }
   .card:hover { border-color: var(--accent); background: var(--accent-soft); transform: translateY(-3px); }
+  .projects > .card:last-child:nth-child(even) { grid-column: 1 / -1; }
   .card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem; }
   .card h3::after { content: "↗"; font-family: var(--mono); font-size: 0.8rem; color: var(--ink-faint); transition: color 150ms, transform 150ms; }
   .card:hover h3, .card:hover h3::after { color: var(--accent); }
@@ -351,7 +352,10 @@
     .project-actions { min-width: 0; }
     .role { grid-template-columns: 1fr; }
     .role .dates { text-align: left; padding-top: 0; }
-    .topbar nav { gap: 0.9rem; }
+    .topbar .wrap { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
+    .topbar .wrap::-webkit-scrollbar { display: none; }
+    .topbar nav { gap: 0.9rem; white-space: nowrap; }
+    #theme-toggle { white-space: nowrap; }
   }
 </style>
 <script>
@@ -362,7 +366,7 @@
   })();
 </script>
 </head>
-<body>
+<body id="top">
 
 <div id="progress"></div>
 <div id="glow"></div>
@@ -398,19 +402,22 @@
     <p class="eyebrow" id="eyebrow" data-text="The University of Texas at Austin"></p>
     <h1><span class="reveal-mask"><span class="reveal-text">Manas Pathak <img src="longhorn.svg" alt="Texas Longhorn logo" class="longhorn"></span></span></h1>
     <div class="hero-intro fade fd1">
-      <p>Hi, I'm Manas — an <strong>ECE student at UT Austin</strong> focused on software
+      <p>Hi, I'm Manas, an <strong>ECE student at UT Austin</strong> focused on software
       engineering, AI systems, and applied machine learning.</p>
       <p>I build <strong>reliable AI infrastructure and agentic systems</strong> that turn
       research ideas into real-world products. My work spans LLM reasoning evaluation,
-      backend engineering, distributed systems, and developer tooling — I like projects
+      backend engineering, distributed systems, and developer tooling. I like projects
       where strong engineering, research intuition, and product impact intersect.</p>
       <p>Reach out about AI systems, infrastructure, research, or just to connect.</p>
     </div>
     <p class="contact-line fade fd2">
-      GitHub: <a href="https://github.com/Manas2006">github.com/Manas2006</a>
-      &nbsp;|&nbsp;
       Email: <a href="#" id="email-copy" data-email="manaspathak@utexas.edu">manaspathak@utexas.edu</a>
     </p>
+    <div class="linkrow fade fd2">
+      <a href="https://github.com/Manas2006" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="https://www.linkedin.com/in/manasp123/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://scholar.google.com/citations?user=_AjKtEoAAAAJ" target="_blank" rel="noopener">Google Scholar ↗</a>
+    </div>
   </div>
 </header>
 
@@ -418,6 +425,16 @@
 
   <section id="experience">
     <div class="sec-head"><h2>Experience</h2></div>
+
+    <div class="role sr">
+      <h3>Machine Learning Researcher · <span class="org">HUMAIN Lab, UT Austin</span></h3>
+      <span class="dates">Mar 2025 – present</span>
+      <p>LLM evaluation and reliability with Prof. Leqi Liu, leading to a first-author COLM 2026
+      paper. Built CUDA-parallel PyTorch and vLLM pipelines that cut evaluation runtime 70%
+      across 100+ models, a distributed GPU job scheduler on AWS that saved ~$10k in cloud
+      costs, Chain-of-Thought hallucination detection for Qwen/Gemma-7B, and React/FastAPI
+      dashboards tracking 50+ distributed jobs.</p>
+    </div>
 
     <div class="role sr">
       <h3>Teaching Assistant, ECE 422C: Software Design &amp; Implementation II · <span class="org">UT Austin ECE</span></h3>
@@ -428,37 +445,33 @@
 
     <div class="role sr">
       <h3>Software Developer Intern · <span class="org">IBM</span></h3>
-      <span class="dates">Summer 2026 · New York, NY</span>
-      <p>Building agent infrastructure for LangGraph Deep Agents on OpenShift,
-      enabling skill-based orchestration across AI workflows.</p>
+      <span class="dates">May 2026 – Aug 2026 · New York, NY</span>
+      <p>Built a full-stack Python/Go platform, with a web UI and APIs, to evaluate and improve
+      1,000+ AI agent skills for 10,000+ employees. Designed a content-addressed cache with
+      request coalescing that eliminated 4.8K redundant inference calls and cut latency 34%,
+      cut infrastructure costs 40% by optimizing scheduling for 100+ Dockerized workers on
+      Kubernetes, and wired an observability pipeline over 100K+ agent execution traces.</p>
     </div>
 
     <div class="role sr">
-      <h3>Machine Learning Researcher · <span class="org">HUMAIN Lab, UT Austin</span></h3>
-      <span class="dates">Mar 2025 — present</span>
-      <p>LLM evaluation and reliability with Prof. Leqi Liu. Built CUDA-parallel PyTorch and
-      vLLM pipelines that cut evaluation runtime 70% across 100+ models, a distributed GPU
-      job scheduler on AWS that saved ~$10k in cloud costs, Chain-of-Thought hallucination
-      detection for Qwen/Gemma-7B, and React/FastAPI dashboards tracking 50+ distributed jobs.</p>
-    </div>
-
-    <div class="role sr">
-      <h3>Undergraduate Department Tutor · <span class="org">ECE 312, UT Austin</span></h3>
-      <span class="dates">Jan 2026 — May 2026</span>
-      <p>Mentoring 40+ students in C/C++ memory management, recursion, and graph traversal,
-      with GDB and Valgrind debugging sessions.</p>
+      <h3>Undergraduate Department Tutor · <span class="org">ECE 312H, UT Austin</span></h3>
+      <span class="dates">Jan 2026 – May 2026</span>
+      <p>Mentored 40+ students in C/C++ memory management, recursion, and graph traversal,
+      and led GDB and Valgrind debugging sessions.</p>
     </div>
 
     <div class="role sr">
       <h3>Software Engineering Intern · <span class="org">Graph Neural Networks Lab, UT Austin</span></h3>
-      <span class="dates">Dec 2024 — Mar 2025</span>
-      <p>Pipeline orchestration and monitoring with TypeScript, React, and PostgreSQL,
-      plus vectorized geometric tooling and performance profiling in Python.</p>
+      <span class="dates">Dec 2024 – Mar 2025</span>
+      <p>Built a distributed Go/TCP execution layer that load-balanced GPU workers with
+      sub-5&nbsp;ms task dispatch and 35% more throughput, and a Python profiler that turned
+      timing logs into a call tree and cut computation time 22%. Also built pipeline
+      orchestration and monitoring with TypeScript, React, and PostgreSQL that halved setup time.</p>
     </div>
 
     <div class="role sr">
       <h3>Software Engineering Intern · <span class="org">ModHeader</span></h3>
-      <span class="dates">Jun 2023 — Oct 2023</span>
+      <span class="dates">Jun 2023 – Oct 2023</span>
       <p>Full-stack work for a 250k-user browser extension: Svelte UI, Node.js APIs on
       DynamoDB, and an analytics dashboard in React and TypeScript.</p>
     </div>
@@ -472,6 +485,7 @@
         <span>arXiv:2604.11996</span>
         <span class="tag">published at COLM 2026</span>
         <span>first author</span>
+        <span class="tag"><a href="https://github.com/HumainLab/filtered_reasoning_score_evaluation" target="_blank" rel="noopener">code ↗</a></span>
       </div>
       <h3><a href="https://arxiv.org/abs/2604.11996">Filtered Reasoning Score: Evaluating Reasoning Quality on a Model's Most-Confident Traces</a></h3>
       <p class="authors"><b>Manas Pathak</b>, Xingyao Chen, Shuozhe Li, Amy Zhang, Leqi Liu</p>
@@ -481,7 +495,10 @@
         traces, conditioning the metric on the model's own confidence. The result is a view
         of reliability that accuracy alone cannot provide: two models with identical scores
         can behave very differently when you only trust what they are sure of, and FRS
-        makes that difference measurable.
+        makes that difference measurable. Across 9 models and 6 reasoning benchmarks, FRS
+        separates models tied at 63.6% accuracy by 16.5 points, agrees with human raters 78%
+        of the time, and its confidence-conditioned top-K ranking lifts rank correlation from
+        0.45 to 0.73.
       </p>
     </article>
 
@@ -495,8 +512,8 @@
       <p class="authors"><b>Manas Pathak</b></p>
       <p class="abstract">
         RL with execution feedback is increasingly used to improve code generation, but
-        finite test suites are imperfect proxies for true correctness — a natural setting
-        for reward hacking. In a controlled PPO study on HumanEval with DeepSeek-Coder-1.3B,
+        finite test suites are imperfect proxies for true correctness, which makes this a
+        natural setting for reward hacking. In a controlled PPO study on HumanEval with DeepSeek-Coder-1.3B,
         I compare binary, partial, and heuristic reward structures across three seeds. Shaped
         rewards improve visible pass@1 but widen the robustness gap on HumanEval+ by up to
         14 pp; pass@k alone overstates semantic competence by 10–18 pp. The work argues
@@ -514,15 +531,16 @@
         <div>
           <p class="product-label"><span class="status-dot" aria-hidden="true"></span>Live product</p>
           <h3>Atlas Research Console</h3>
-          <p>Use Atlas to search a distributed-systems knowledge base and explore how
-          indexing, replication, event streaming, and media pipelines behave under load
-          and failure. The interactive console exposes system health, query behavior,
-          recovery workflows, and the engineering behind each service.</p>
-          <div class="stack"><span>Go</span><span>gRPC</span><span>BM25</span><span>Raft</span><span>Kafka</span><span>FFmpeg</span></div>
+          <p>A self-hosted research workspace I built for my lab. Members search papers and
+          notes with BM25 full-text search over a replayable write-ahead log, register
+          experiments, and measure treatment-versus-control lift with Impact Experiments.
+          Live Docs let people edit together while agents propose tracked suggestions.
+          Standalone engineering labs include a Raft key-value store and a Kafka event pipeline.</p>
+          <div class="stack"><span>Go</span><span>BM25</span><span>Write-ahead log</span><span>WebSocket</span><span>Raft</span><span>Docker</span></div>
         </div>
         <div class="project-actions" aria-label="Atlas Research Console links">
-          <a class="primary" href="https://manas2006.github.io/distributed-systems-portfolio/" target="_blank" rel="noopener">Open live console ↗</a>
-          <a href="https://github.com/Manas2006/distributed-systems-portfolio" target="_blank" rel="noopener">View source ↗</a>
+          <a class="primary" href="https://manas2006.github.io/atlas-research/" target="_blank" rel="noopener">Open live console ↗</a>
+          <a href="https://github.com/Manas2006/atlas-research" target="_blank" rel="noopener">View source ↗</a>
         </div>
       </article>
 
@@ -535,11 +553,21 @@
         <div class="stack"><span>Python</span><span>Stockfish</span><span>scikit-learn</span><span>FastAPI</span><span>SQLite</span><span>React</span></div>
       </a>
 
+      <a class="card sr" href="https://github.com/Manas2006/ride-dispatch-simulator" target="_blank" rel="noopener">
+        <h3>Ride Dispatch Simulator</h3>
+        <p>Real-time ride dispatch with ETA-based matching, surge pricing, and live trip
+        state machines, streamed to a browser dashboard over a WebSocket protocol written
+        from scratch on a native HTTP server. Load-tested at 10,000 drivers and 10,000
+        requests: 770 req/sec, 0.12&nbsp;ms p95 dispatch, 99.8% match rate.</p>
+        <div class="stack"><span>Node.js</span><span>WebSocket</span><span>Geospatial</span><span>Canvas</span></div>
+      </a>
+
       <a class="card sr" href="https://github.com/Manas2006/fraud-detection" target="_blank" rel="noopener">
         <h3>CyberWise Seniors</h3>
-        <p>Fraud-detection platform shielding seniors from phone, SMS, and email scams.
-        A Spring Boot microservice wired to a BERT classifier returns risk scores in
-        &lt;200&nbsp;ms; Twilio webhooks and a React dashboard cut scam successes 60%.</p>
+        <p>Nonprofit I co-founded to protect 100+ seniors from phone, SMS, and email scams:
+        text in a suspicious message and get back an immediate safe-or-not answer. A Spring
+        Boot microservice wired to a BERT classifier returns risk scores in &lt;200&nbsp;ms,
+        with Twilio webhooks and a React dashboard.</p>
         <div class="stack"><span>Java</span><span>Spring Boot</span><span>BERT</span><span>Twilio</span><span>React</span></div>
       </a>
 
@@ -585,16 +613,16 @@
         <h3>The University of Texas at Austin</h3>
         <span class="dates">Expected May 2028</span>
       </div>
-      <p class="degree"><b>B.S. Electrical &amp; Computer Engineering</b>, Software Concentration · GPA 3.96 / 4.00</p>
+      <p class="degree"><b>B.S. Electrical &amp; Computer Engineering</b> · <span style="white-space: nowrap;">GPA 3.96 / 4.00</span><br>Technical Component: Software Engineering &amp; Design</p>
       <p class="course-label">Relevant coursework</p>
       <div class="courses">
         <span>Distributed Systems</span>
-        <span>Deep Reinforcement Learning</span>
         <span>Operating Systems</span>
         <span>Machine Learning</span>
+        <span>Deep Reinforcement Learning</span>
         <span>Computer Architecture</span>
         <span>Data Structures &amp; Algorithms</span>
-        <span>Discrete Math</span>
+        <span>Probability &amp; Random Processes</span>
         <span>Software Design &amp; Implementation I/II</span>
       </div>
     </div>
@@ -609,9 +637,9 @@
         making them legible: tracing what they did, why they did it, and whether it worked.</p>
         <p>That is the thread through my work. My research builds evaluation methods that
         condition on a model's own confidence, so a score reflects behavior you would
-        actually act on. My engineering builds the observability layer for agent workflows,
-        instrumenting how agents select and compose skills. Capability claims should be
-        verifiable. That is how we trust progress.</p>
+        actually act on. At IBM I built the evaluation and observability layer for agent
+        workflows, instrumenting how agents select and compose skills across 100K+ execution
+        traces. Capability claims should be verifiable. That is how we trust progress.</p>
       </div>
       <dl class="facts">
         <dt>Degree</dt><dd>B.S. ECE, May 2028</dd>
@@ -627,7 +655,7 @@
 <footer>
   <div class="wrap">
     <span>© 2026 Manas Pathak · Austin, TX</span>
-    <span><a href="#experience">back to top ↑</a></span>
+    <span><a href="#top">back to top ↑</a></span>
   </div>
 </footer>
 
